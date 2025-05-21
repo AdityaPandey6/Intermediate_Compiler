@@ -1,0 +1,24 @@
+main:
+  // Entry
+  x = 5
+  y = 3
+  sum = x + y
+  prod = x * y
+  diff = prod - sum
+  quotient = prod / y
+  mod = prod % y
+  ifFalse diff > 5 goto L_if_false_0
+  sum = sum + 1
+  goto L_if_end_0
+L_if_false_0:
+L_if_end_0:
+  sum = sum - 1
+  i = 0
+  total = 0
+  total = total + i
+  t0 = return total + sum + quotient + mod
+  return 0
+
+L_end:
+  // Function exit
+

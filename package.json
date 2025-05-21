@@ -1,0 +1,22 @@
+{
+  "name": "c-to-intermediate-code-compiler",
+  "version": "1.0.0",
+  "description": "A compiler that translates C code to intermediate code",
+  "main": "src/compiler.js",
+  "scripts": {
+    "compile": "node src/compiler.js",
+    "test": "node test/run-tests.js"
+  },
+  "keywords": [
+    "compiler",
+    "c",
+    "intermediate-code"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}

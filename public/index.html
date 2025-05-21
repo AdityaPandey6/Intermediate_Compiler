@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>C to Intermediate Code Compiler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            cursor: none;
+        }
+
+        body {
+            cursor: none;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 2em;
+            background: #0f172a;
+            color: #e0e8ff;
+        }
+
+        h1 {
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            text-align: center;
+            color: #38bdf8;
+            letter-spacing: 1px;
+            font-size: 2.5em;
+            text-shadow: 0 0 8px #38bdf8, 0 0 2px #fff;
+        }
+
+        .main-flex {
+            display: flex;
+            gap: 2em;
+            justify-content: center;
+            align-items: flex-start;
+            margin-bottom: 2em;
+        }
+
+        .code-section {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 100%;
+            width: 50%;
+            background: #181e2a;
+            border-radius: 10px;
+            box-shadow: 0 0 16px #38bdf8a0, 0 2px 8px #222a;
+            padding: 1.2em 1em 1.5em 1em;
+            border: 1.5px solid #38bdf8;
+            text-align: center;
+        }
+
+        .lexeme-section {
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 100%;
+            width: 50%;
+            background: #181e2a;
+            border-radius: 10px;
+            box-shadow: 0 0 16px #38bdf8a0, 0 2px 8px #222a;
+            padding: 1.2em 1em 1.5em 1em;
+            border: 1.5px solid #38bdf8;
+        }
+
+        textarea {
+            width: 100%;
+            height: 140px;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            font-size: 1em;
+            border: 1.5px solid #38bdf8;
+            border-radius: 6px;
+            padding: 0.7em;
+            background: #0f172a;
+            color: #e0e8ff;
+            box-shadow: 0 0 8px #38bdf8a0;
+            transition: border 0.2s, box-shadow 0.2s;
+            resize: none;
+            width: 527px;
+            height: 279px;
+            cursor: url('https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.5.2/src/svg/code-slash-outline.svg') 16 16, text;
+            caret-color: transparent;
+        }
+
+        textarea:focus {
+            border: 2px solid #38bdf8;
+            outline: none;
+            box-shadow: 0 0 16px #38bdf8, 0 0 2px #fff;
+            caret-color: transparent;
+            cursor: none;
+        }
+
+        textarea,
+        textarea:focus {
+            caret-color: #ffb300 !important;
+        }
+
+        .lexeme-table-wrapper {
+            max-height: 330px;
+            overflow-y: auto;
+            border: 1px solid #38bdf8;
+            border-radius: 6px;
+            box-shadow: 0 0 8px #38bdf8a0;
+            background: #0f172a;
+        }
+
+        table.output {
+            width: 100%;
+            border-collapse: collapse;
+            background: #0f172a;
+            color: #e0e8ff;
+        }
+
+        th,
+        td {
+            padding: 0.5em 1em;
+            border-bottom: 1px solid #1e293b;
+            text-align: left;
+        }
+
+        th {
+            background: #38bdf8;
+            color: #0f172a;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            text-shadow: 0 0 4px #fff;
+        }
+
+        tr:nth-child(even) td {
+            background: #17203a;
+        }
+
+        button {
+            padding: 0.6em 1.5em;
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 1em;
+            box-shadow: 0 0 8px #38bdf8a0, 0 2px 8px #222a;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            text-shadow: 0 0 2px #fff;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+            color: #fff;
+            box-shadow: 0 0 16px #38bdf8, 0 0 2px #fff;
+        }
+
+        .section {
+            margin-bottom: 2em;
+        }
+
+        .output {
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            font-size: 1em;
+            background: #181e2a;
+            padding: 1em;
+            margin-top: 1em;
+            border-radius: 6px;
+            box-shadow: 0 0 8px #38bdf8a0;
+            white-space: pre;
+            color: #38bdf8;
+            border: 1.5px solid #38bdf8;
+        }
+
+        .lexeme-table-wrapper,
+        .output,
+        table.output,
+        th,
+        td {
+            cursor: url('https://cdn.jsdelivr.net/gh/ionic-team/ionicons@5.5.2/src/svg/code-slash-outline.svg') 16 16, auto;
+        }
+
+        @media (max-width: 900px) {
+            .main-flex {
+                flex-direction: column;
+                gap: 1em;
+            }
+
+            .code-section,
+            .lexeme-section {
+                max-width: 100%;
+                min-width: 0;
+                width: 100%;
+            }
+        }
+
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.95);
+            border: 2px solid #fff;
+            box-shadow: 0 0 8px #38bdf8, 0 0 2px #fff;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+            transition: background 0.2s, border 0.2s;
+        }
+
+        #cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(56, 189, 248, 0.25);
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            filter: blur(2px);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>C to Intermediate Code Compiler</h1>
+    <div class="main-flex">
+        <div class="section code-section">
+            <label for="code" style="font-weight: bold;">Enter C code:</label><br><br>
+            <textarea id="code" placeholder="Type your C code here..."></textarea>
+            <br>
+            <button onclick="analyze()">Analyze</button>
+        </div>
+        <div class="section lexeme-section">
+            <h2>Lexemes (Tokens)</h2>
+            <div class="lexeme-table-wrapper">
+                <table id="lexemeTable" class="output">
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Intermediate Code</h2>
+        <div id="intermediate" class="output"></div>
+    </div>
+    <!-- Custom cursor and trail -->
+    <div id="custom-cursor"></div>
+    <div id="cursor-trail"></div>
+    <script>
+        async function analyze() {
+            const code = document.getElementById('code').value;
+            // Lexemes
+            const lexRes = await fetch('/api/lex', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+            const lexData = await lexRes.json();
+            renderLexemeTable(lexData.tokens);
+            // Intermediate code
+            const icRes = await fetch('/api/compile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+            const icData = await icRes.json();
+            document.getElementById('intermediate').textContent = icData.error ? ('Error: ' + icData.error) : icData.intermediate;
+        }
+
+        function renderLexemeTable(tokens) {
+            const table = document.getElementById('lexemeTable');
+            if (!tokens || tokens.length === 0) {
+                table.innerHTML = '<tr><td>No tokens found.</td></tr>';
+                return;
+            }
+            let html = '<tr><th>Type</th><th>Value</th></tr>';
+            for (let i = 0; i < tokens.length; i++) {
+                html += `<tr><td>${tokens[i].type}</td><td>${tokens[i].value}</td></tr>`;
+            }
+            table.innerHTML = html;
+        }
+
+        // Custom cursor and trail
+        const cursor = document.getElementById('custom-cursor');
+        const trail = document.getElementById('cursor-trail');
+        let mouseX = window.innerWidth / 2,
+            mouseY = window.innerHeight / 2;
+        let trailX = mouseX,
+            trailY = mouseY;
+        function updateCursor() {
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        }
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            updateCursor();
+        });
+        function animateTrail() {
+            trailX += (mouseX - trailX) * 0.25;
+            trailY += (mouseY - trailY) * 0.25;
+            trail.style.left = trailX + 'px';
+            trail.style.top = trailY + 'px';
+            // Always update cursor position to be in front
+            updateCursor();
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+    </script>
+</body>
+
+</html>
