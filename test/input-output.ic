@@ -1,22 +1,25 @@
 main:
   // Entry
-  x = 5
-  y = 3
-  sum = x + y
-  prod = x * y
-  diff = prod - sum
-  quotient = prod / y
-  mod = prod % y
-  ifFalse diff > 5 goto L_if_false_0
-  sum = sum + 1
-  goto L_if_end_0
-L_if_false_0:
-L_if_end_0:
-  sum = sum - 1
-  i = 0
-  total = 0
-  total = total + i
-  t0 = return total + sum + quotient + mod
+  a = 2
+  b = 3
+  c = 4
+  d = 5
+  t0 = a + b
+  t1 = c + d
+  t2 = t0 * t1
+  t3 = a * b
+  t4 = t2 - t3
+  t5 = c / d
+  t6 = t4 + t5
+  x = t6
+  t7 = b * c
+  t8 = a + t7
+  t9 = a + 1
+  t10 = d / t9
+  t11 = t8 - t10
+  y = t11
+  t12 = x + y
+  t0 = return
   return 0
 
 L_end:

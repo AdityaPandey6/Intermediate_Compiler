@@ -1,20 +1,9 @@
 int main() {
-  int x = 5;
-  int y = 3;
-  int sum = x + y;
-  int prod = x * y;
-  int diff = prod - sum;
-  int quotient = prod / y;
-  int mod = prod % y;
-  if (diff > 5) {
-    sum = sum + 1;
-  } else {
-    sum = sum - 1;
-  }
-  int i = 0;
-  int total = 0;
-  for (i = 0; i < 3; i = i + 1) {
-    total = total + i;
-  }
-  return total + sum + quotient + mod;
+  int a = 2;
+  int b = 3;
+  int c = 4;
+  int d = 5;
+  int x = (a + b) * (c + d) - a * b + c / d;
+  int y = a + b * c - d / (a + 1);
+  return x + y;
 }

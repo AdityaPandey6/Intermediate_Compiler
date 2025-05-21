@@ -1,7 +1,29 @@
 // Simple C lexer for tokenizing source code
-const KEYWORDS = ['int', 'float', 'double', 'char', 'if', 'else', 'for', 'while', 'return', 'void'];
-const OPERATORS = ['+', '-', '*', '/', '%', '=', '==', '!=', '<', '>', '<=', '>=', '&&', '||', '!', '++', '--'];
-const SYMBOLS = ['(', ')', '{', '}', ';', ',', '[', ']'];
+const KEYWORDS = [
+    'auto', 'break', 'case', 'char', 'const', 'continue',
+    'default', 'do', 'double', 'else', 'enum', 'extern',
+    'float', 'for', 'goto', 'if', 'inline', 'int',
+    'long', 'register', 'restrict', 'return', 'short', 'signed',
+    'sizeof', 'static', 'struct', 'switch', 'typedef', 'union',
+    'unsigned', 'void', 'volatile', 'while',
+    '_Alignas', '_Alignof', '_Atomic', '_Generic', '_Noreturn',
+    '_Static_assert', '_Thread_local'
+];
+const OPERATORS = [
+    '+', '-', '*', '/', '%', '++', '--',
+    '=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '&=', '^=', '|=',
+    '==', '!=', '<', '>', '<=', '>=',
+    '&&', '||', '!',
+    '&', '|', '^', '~', '<<', '>>',
+    '?', ':', '.', '->', '...'
+];
+
+const SYMBOLS = [
+    '(', ')', '{', '}', '[', ']',
+    ';', ',', '#', '##',
+    '#define', '#include', '#ifdef', '#ifndef', '#endif', '#if', '#else', '#elif',
+    '\\'
+];
 
 function isWhitespace(ch) {
     return /\s/.test(ch);
